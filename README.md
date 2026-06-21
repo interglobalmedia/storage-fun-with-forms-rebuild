@@ -17,6 +17,10 @@ The feature set, form fields, image options, and overall layout are a faithful p
 
 A couple of real bugs from the original `main.js` were fixed during the port (a no-op argument on `localStorage.getItem`, and a quota-exceeded check that discarded the actual caught error) — see `src/main.js` for details.
 
+Two small additions beyond a straight port:
+- A third spider web image (present in the original's asset folder but never wired into the dropdown) is now a selectable option.
+- The decorative image used absolute positioning with hardcoded offsets that could push it below the form's border at smaller viewport widths — a bug present in the original. It now uses normal document flow below the `680px` breakpoint, so it can't overflow regardless of viewport size.
+
 ## Getting started
 
 ```bash
@@ -35,11 +39,9 @@ npm run preview   # preview the production build locally
 
 ## Deployment
 
-A GitHub Actions workflow (`.github/workflows/deploy.yml`) builds the app and deploys it to GitHub Pages. It currently runs only on manual trigger (`workflow_dispatch`) — uncomment the `push` trigger in the workflow file once you're ready to deploy automatically on every push to `main`.
+A GitHub Actions workflow (`.github/workflows/deploy.yml`) builds the app and deploys it to GitHub Pages automatically on every push to `main`. It can also be triggered manually from the **Actions** tab → **Deploy to GitHub Pages** → **Run workflow**.
 
-To deploy manually right now: go to the **Actions** tab on GitHub → select **Deploy to GitHub Pages** → **Run workflow**.
-
-You'll also need to set the Pages source to **GitHub Actions** under **Settings → Pages** in the repo, if it isn't already.
+**One-time setup, before the workflow can succeed:** go to **Settings → Pages** in the repo and set **Source** to **GitHub Actions**. This has to be done first — if the workflow runs before the Pages source is set, it'll fail since the `github-pages` deployment environment doesn't exist yet.
 
 ## Known issues
 
