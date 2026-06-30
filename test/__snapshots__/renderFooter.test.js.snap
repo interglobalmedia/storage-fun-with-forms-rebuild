@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`It renders two sword symbols, a copyright symbol, the dynamic year, and the name Maria D. Campbell > Displays two sword symbols, a copywright symbol, a dynamic year, and the name Maria D. Campbell when the footer is present > &#10013; &copy; 2026 Maria D. Campbell &#10013; 1`] = `"✝ © 2026 Maria D. Campbell ✝"`;
