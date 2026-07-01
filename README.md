@@ -12,10 +12,11 @@ This is a modern rebuild of the original [`local-storage-session-storage-fun-for
 | Styles | SCSS via `node-sass` (end-of-life) | SCSS via [Dart Sass](https://sass-lang.com/dart-sass/) |
 | Color picker | [jscolor](http://jscolor.com/) | [Coloris](https://github.com/melloware/coloris-npm) (actively maintained) |
 | Deployment | `gh-pages` npm package | GitHub Actions workflow |
+| Testing | None | [Vitest](https://vitest.dev/) + [Istanbul](https://istanbul.js.org/) coverage |
 
 The feature set, form fields, image options, and overall layout are a faithful port of the original — including a few intentionally-preserved label quirks (e.g. some image dropdown labels don't quite match their filenames, same as the original).
 
-A couple of real bugs from the original `main.js` were fixed during the port (a no-op argument on `localStorage.getItem`, and a quota-exceeded check that discarded the actual caught error) — see `src/main.js` for details.
+A couple of real bugs from the original `main.js` were fixed during the port (a no-op argument on `localStorage.getItem`, and a quota-exceeded check that discarded the actual caught error) — see `src/index.js` for details. Tests were added to cover these bugs found in the original codebase during the rebuild process.
 
 Two small additions beyond a straight port:
 - A third spider web image (present in the original's asset folder but never wired into the dropdown) is now a selectable option.
@@ -43,27 +44,84 @@ A GitHub Actions workflow (`.github/workflows/deploy.yml`) builds the app and de
 
 **One-time setup, before the workflow can succeed:** go to **Settings → Pages** in the repo and set **Source** to **GitHub Actions**. This has to be done first — if the workflow runs before the Pages source is set, it'll fail since the `github-pages` deployment environment doesn't exist yet.
 
-## Known issues
+## Testing
 
-`npm audit` currently reports 2 vulnerabilities (1 moderate, 1 high), both stemming from `esbuild` as a transitive dependency of `vite@5.x`:
+This project uses [Vitest](https://vitest.dev/) for testing and [Istanbul](https://istanbul.js.org/) for code coverage. Tests cover the three bugs identified in the original codebase during the rebuild process.
 
-> esbuild enables any website to send any requests to the development server and read the response — [GHSA-67mh-4wv8-2f99](https://github.com/advisories/GHSA-67mh-4wv8-2f99)
+### Run all tests (watch mode)
 
-This only affects the **local dev server** (`npm run dev`) — it has no bearing on the built/deployed static site, since esbuild is build tooling, not part of the runtime output. `npm audit fix --force` will resolve it but jumps to `vite@8.x`, a breaking major-version change. Holding off until a non-breaking fix lands (Vite 6/7 stabilizing) or doing a deliberate, tested upgrade rather than forcing it blind.
+```bash
+npm test
+```
+
+Vitest runs in watch mode by default — it re-runs affected tests automatically on file changes until you exit with `Ctrl+C`.
+
+### Run a specific test file
+
+```bash
+npm test -- test/withHash.test.js
+```
+
+### Run tests matching a name pattern
+
+```bash
+npm test -- -t "withHash"
+```
+
+### Run coverage
+
+```bash
+npm run coverage
+```
+
+Coverage output is written to the `coverage/` directory using the Istanbul provider and is tracked in the repo for reference alongside the blog series.
+
+### Reporter options
+
+Pass `--reporter` to control terminal output format:
+
+| Reporter | Description |
+|---|---|
+| `--reporter=verbose` | Shows every individual test name and pass/fail status — useful for seeing exactly which tests ran |
+| `--reporter=dot` | Minimal output — one dot per passing test, `x` for failures. Good for large suites |
+| `--reporter=json` | Outputs results as JSON — useful for piping into other tools |
+| `--reporter=junit` | XML format — common in CI pipelines that ingest JUnit reports (Jenkins, etc.) |
+
+Example:
+
+```bash
+npm test -- --reporter=verbose
+```
 
 ## Project structure
 
 ```
 .
-├── index.html              # Markup, ported from the original
+├── index.html                  # Markup, ported from the original
 ├── public/
 │   ├── favicon.ico
-│   └── images/              # Decorative clipart images
+│   └── images/                 # Decorative clipart images (26 total)
 ├── src/
-│   ├── main.js              # App logic (JS port of original main.js)
-│   └── style.scss           # Styles (ported from main.scss)
+│   ├── constants.js            # Shared constants (storage keys, etc.)
+│   ├── index.js                # App entry point and event wiring
+│   ├── style.scss              # Styles (ported from original main.scss)
+│   └── modules/
+│       ├── clearStorage.js
+│       ├── emptyStorage.js
+│       ├── localStorageSupport.js
+│       ├── populateStorage.js
+│       ├── renderFooter.js
+│       ├── restoreNote.js
+│       ├── setStyles.js
+│       └── withHash.js
+├── test/
+│   ├── __snapshots__/
+│   │   └── renderFooter.test.js.snap
+│   ├── localStorageSupport.test.js
+│   ├── renderFooter.test.js
+│   └── withHash.test.js
 └── .github/workflows/
-    └── deploy.yml          # GitHub Pages deploy workflow
+    └── deploy.yml              # GitHub Pages deploy workflow
 ```
 
 ## Credits
