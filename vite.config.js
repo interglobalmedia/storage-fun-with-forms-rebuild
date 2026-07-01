@@ -7,7 +7,6 @@ export default defineConfig({
     outDir: 'dist',
   },
   test: {
-    setupFiles: ['vitest-localstorage-mock'],
     globals: true,
     environment: "jsdom",
     coverage: {
