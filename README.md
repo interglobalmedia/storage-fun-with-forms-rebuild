@@ -41,7 +41,8 @@ Two small additions beyond a straight port:
 
 **Code Quality Tooling:**
 
-- No linting/formatting → ESLint 10 (flat config), Prettier 3, Stylelint 17, Husky 9 — `validate` gates on lint, stylelint, format check, and tests.
+- No linting/formatting → ESLint 10 (flat config), Prettier 3, Stylelint 17,
+  Husky 9 — `validate` gates on lint, stylelint, format check, and tests.
 
 **Build & Deployment:**
 
