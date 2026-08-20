@@ -95,33 +95,82 @@ npm test -- --reporter=verbose
 
 ## Project structure
 
+This is the same folder and file layout you'd see browsing the repository on GitHub or opening it in a code editor: folders listed before files, alphabetically within each group. `public/images/` and `coverage/` are shown collapsed below, without their contents listed, since one holds 26 decorative image files and the other is Istanbul's generated report output:
+
 ```
 .
-├── index.html                  # Markup, ported from the original
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+├── coverage/
 ├── public/
-│   ├── favicon.ico
-│   └── images/                 # Decorative clipart images (26 total)
+│   ├── images/
+│   └── favicon.ico
 ├── src/
-│   ├── constants.js            # Shared constants (storage keys, etc.)
-│   ├── index.js                # App entry point and event wiring
-│   ├── style.scss              # Styles (ported from original main.scss)
-│   └── modules/
-│       ├── clearStorage.js
-│       ├── emptyStorage.js
-│       ├── localStorageSupport.js
-│       ├── populateStorage.js
-│       ├── renderFooter.js
-│       ├── restoreNote.js
-│       ├── setStyles.js
-│       └── withHash.js
+│   ├── modules/
+│   │   ├── clearStorage.js
+│   │   ├── emptyStorage.js
+│   │   ├── localStorageSupport.js
+│   │   ├── populateStorage.js
+│   │   ├── renderFooter.js
+│   │   ├── restoreNote.js
+│   │   ├── setStyles.js
+│   │   └── withHash.js
+│   ├── constants.js
+│   ├── index.js
+│   └── style.scss
 ├── test/
 │   ├── __snapshots__/
 │   │   └── renderFooter.test.js.snap
 │   ├── localStorageSupport.test.js
 │   ├── renderFooter.test.js
 │   └── withHash.test.js
-└── .github/workflows/
-    └── deploy.yml              # GitHub Pages deploy workflow
+├── .gitignore
+├── .nvmrc
+├── index.html
+├── package-lock.json
+├── package.json
+├── README.md
+└── vite.config.js
+```
+
+If you ran `tree -a -I 'node_modules|.git|.DS_Store|.vscode|.publish|dist|output.txt|git-commit-messages.md'` from the command line, filtering out the same noise this diagram excludes but without `--dirsfirst`, files and folders would be listed together, alphabetically, rather than folders-first:
+
+```
+.
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+├── .gitignore
+├── .nvmrc
+├── coverage/
+├── index.html
+├── package-lock.json
+├── package.json
+├── public/
+│   ├── favicon.ico
+│   └── images/
+├── README.md
+├── src/
+│   ├── constants.js
+│   ├── index.js
+│   ├── modules/
+│   │   ├── clearStorage.js
+│   │   ├── emptyStorage.js
+│   │   ├── localStorageSupport.js
+│   │   ├── populateStorage.js
+│   │   ├── renderFooter.js
+│   │   ├── restoreNote.js
+│   │   ├── setStyles.js
+│   │   └── withHash.js
+│   └── style.scss
+├── test/
+│   ├── __snapshots__/
+│   │   └── renderFooter.test.js.snap
+│   ├── localStorageSupport.test.js
+│   ├── renderFooter.test.js
+│   └── withHash.test.js
+└── vite.config.js
 ```
 
 ## Credits
